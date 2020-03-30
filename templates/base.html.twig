@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name=viewport content="width=device-width,initial-scale=1">
+        <title>
+        {% set base_title = "Webshop" %}
+        {% if block("title") is defined %}
+            {% set title_block = block("title") %}
+            {% if title_block is not empty %}
+                {{ title_block | raw }} ー {{ base_title }}
+            {% else %}
+                {{ base_title }}
+            {% endif %}
+        {% else %}
+            {{ base_title }}
+        {% endif %}
+        </title>
+        {{ encore_entry_link_tags("style") }}
+    </head>
+    <body>
+        <header class="page-header">
+            {% include "header.html.twig" %}
+        </header>
+        <div class="page-wrapper">
+            <main class="page-contents">
+                {% block page %}{% endblock %}
+            </main>
+        </div>
+        <footer class="page-footer">
+        </footer>
+    </body>
+</html>
