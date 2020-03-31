@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +32,11 @@ class Product
      * @ORM\Column(type="decimal", precision=12, scale=2)
      */
     private $price;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Stock", mappedBy="product", orphanRemoval=true)
+     */
+    private $stock;
 
     public function getId() : ?int
     {
@@ -72,4 +78,17 @@ class Product
 
         return $this;
     }
+
+    public function getStock() : ?Stock
+    {
+        return $this->stock;
+    }
+
+    public function setStock(Stock $stock) : self
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
 }
