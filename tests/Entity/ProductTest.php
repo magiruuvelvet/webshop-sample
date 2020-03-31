@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use App\Entity\Product;
+use App\Entity\Stock;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProductTest extends KernelTestCase
@@ -45,6 +46,16 @@ class ProductTest extends KernelTestCase
     }
 
     /**
+     * Get stock by id from database
+     */
+    private function getStock(int $id) : ?Stock
+    {
+        return $this->entityManager
+            ->getRepository(Stock::class)
+            ->find($id);
+    }
+
+    /**
      * Test product creation
      */
     public function testCreate() : void
@@ -57,14 +68,26 @@ class ProductTest extends KernelTestCase
         $this->entityManager->persist($product);
         $this->entityManager->flush();
 
+        $stock = new Stock();
+        $stock->setQuantity(30);
+        $stock->setProduct($product);
+
+        $this->entityManager->persist($stock);
+        $this->entityManager->flush();
+
         self::$product_id = $product->getId();
         $product = $this->getProduct(self::$product_id);
+
+        $stock = $this->getStock($stock->getId());
 
         $this->assertNotNull($product);
         $this->assertTrue($product->getId() == self::$product_id);
         $this->assertTrue($product->getName() == "Laptop");
         $this->assertTrue($product->getNumber() == "0000-0000000");
         $this->assertTrue($product->getPrice() == "4200");
+
+        $this->assertTrue($stock->getQuantity() == 30);
+        $this->assertTrue($stock->getProduct()->getName() == "Laptop");
     }
 
     /**
