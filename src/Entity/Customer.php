@@ -45,7 +45,7 @@ class Customer
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="CustomerAddress", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="CustomerAddress", mappedBy="customer", orphanRemoval=true)
      */
     private $addresses;
 
