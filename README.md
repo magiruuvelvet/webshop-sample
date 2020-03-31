@@ -1,5 +1,9 @@
 # Sample Webshop
 
+*Sample project to get started with the [Symfony](https://symfony.com/)*
+*web framework for an upcoming project. Repository is public for*
+*educational purposes. Feel free to use it.*
+
 ## Requirements
 
  - PHP 7.2.5 or higher (PHP 7.3+ recommended)
@@ -11,7 +15,7 @@
  - PHP Module: `gmp`
  - PHP Module: `mbstring`
 
-## Installation (Production)
+## Installation (Production Mode)
 
  - Clone this repository
  - Create a `../data` (outside of project source) directory and make sure it is
