@@ -57,6 +57,12 @@ class CustomerAddress
      */
     private $phone_number;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     */
+    private $customer;
+
     public function getId() : ?int
     {
         return $this->id;
@@ -154,6 +160,18 @@ class CustomerAddress
     public function setPhoneNumber(string $phone_number) : self
     {
         $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getCustomer() : ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer) : self
+    {
+        $this->customer = $customer;
 
         return $this;
     }
