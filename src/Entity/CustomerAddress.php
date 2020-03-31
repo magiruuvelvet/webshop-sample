@@ -18,6 +18,11 @@ class CustomerAddress
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $customer_id;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $street_name;
@@ -52,15 +57,19 @@ class CustomerAddress
      */
     private $phone_number;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Customer", inversedBy="address_ids")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $customer_id;
-
     public function getId() : ?int
     {
         return $this->id;
+    }
+
+    public function getCustomerId() : ?int
+    {
+        return $this->customer_id;
+    }
+
+    public function setCustomerId(int $customer_id)
+    {
+        $this->customer_id = $customer_id;
     }
 
     public function getStreetName() : ?string
@@ -143,18 +152,6 @@ class CustomerAddress
     public function setPhoneNumber(string $phone_number) : self
     {
         $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
-    public function getCustomerId() : ?Customer
-    {
-        return $this->customer_id;
-    }
-
-    public function setCustomerId(?Customer $customer_id) : self
-    {
-        $this->customer_id = $customer_id;
 
         return $this;
     }

@@ -44,11 +44,6 @@ class Customer
      */
     private $password;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CustomerAddress", mappedBy="customer_id", orphanRemoval=true)
-     */
-    private $address_ids;
-
     public function __construct()
     {
         $this->address_ids = new ArrayCollection();
@@ -124,32 +119,16 @@ class Customer
      */
     public function getAddresses() : Collection
     {
-        return $this->address_ids;
+        // TODO:
     }
 
     public function addAddress(CustomerAddress $address) : self
     {
-        if (!$this->address_ids->contains($address))
-        {
-            $this->address_ids[] = $address;
-            $address->setCustomerId($this);
-        }
-
-        return $this;
+        // TODO:
     }
 
     public function removeAddress(CustomerAddress $address) : self
     {
-        if ($this->address_ids->contains($address))
-        {
-            $this->address_ids->removeElement($address);
-            // set the owning side to null (unless already changed)
-            if ($address->getCustomerId() === $this)
-            {
-                $address->setCustomerId(null);
-            }
-        }
-
-        return $this;
+        // TODO:
     }
 }
