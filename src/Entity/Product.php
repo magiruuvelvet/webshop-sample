@@ -91,4 +91,24 @@ class Product
         return $this;
     }
 
+    public function toJson() : string
+    {
+        return json_encode([
+            "id" => $this->id,
+            "number" => $this->number,
+            "name" => $this->name,
+            "price" => $this->price,
+        ]);
+    }
+
+    public static function toJsonArray(array $products) : string
+    {
+        $arr = [];
+        foreach ($products as $product)
+        {
+            $arr[] = $product->toJson();
+        }
+        $json = join(',', $arr);
+        return "[{$json}]";
+    }
 }
