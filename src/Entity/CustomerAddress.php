@@ -67,9 +67,11 @@ class CustomerAddress
         return $this->customer_id;
     }
 
-    public function setCustomerId(int $customer_id)
+    public function setCustomerId(int $customer_id) : self
     {
         $this->customer_id = $customer_id;
+
+        return $this;
     }
 
     public function getStreetName() : ?string
