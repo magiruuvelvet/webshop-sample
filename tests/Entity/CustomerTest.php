@@ -46,6 +46,16 @@ class CustomerTest extends KernelTestCase
     }
 
     /**
+     * Get customer address by id from database
+     */
+    private function getCustomerAddress(int $id) : ?CustomerAddress
+    {
+        return $this->entityManager
+            ->getRepository(CustomerAddress::class)
+            ->find($id);
+    }
+
+    /**
      * Test customer creation
      */
     public function testCreate() : void
@@ -72,9 +82,42 @@ class CustomerTest extends KernelTestCase
     }
 
     /**
+     * Test customer address creation and deletion
+     * Deletion should be automatic by doctrine due to orphan removal
+     */
+    public function testAddress() : void
+    {
+        $customer = $this->getCustomer(self::$customer_id);
+        $address = new CustomerAddress();
+        $address->setStreetName("some street");
+        $address->setStreetNumber("1");
+        $address->setPostalCode("1234");
+        $address->setCity("somewhere");
+        $address->setCountry("--");
+        $address->setPhoneNumber("0123456789");
+        $customer->addAddress($address);
+        $this->entityManager->persist($address);
+        $this->entityManager->flush();
+
+        $address = $this->getCustomerAddress($address->getId());
+        $this->assertTrue($address->getStreetName() == "some street");
+        $this->assertTrue($address->getStreetNumber() == "1");
+        $this->assertTrue($address->getPostalCode() == "1234");
+        $this->assertTrue($address->getCity() == "somewhere");
+        $this->assertTrue($address->getDistrict() == null);
+        $this->assertTrue($address->getCountry() == "--");
+        $this->assertTrue($address->getPhoneNumber() == "0123456789");
+
+        $this->assertTrue($customer->getAddresses()->first()->getStreetName() == "some street");
+
+        $this->assertTrue($address->getCustomer()->getFirstname() == "firstname");
+    }
+
+    /**
      * Test customer updating
      *
      * @depends testCreate
+     * @depends testAddress
      */
     public function testUpdate() : void
     {
@@ -94,6 +137,7 @@ class CustomerTest extends KernelTestCase
      * Test customer deletion
      *
      * @depends testUpdate
+     * @depends testAddress
      */
     public function testDelete() : void
     {
