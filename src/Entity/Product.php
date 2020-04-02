@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use JsonSerializable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  * @ORM\Table(name="products")
  */
-class Product
+class Product implements JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -91,24 +91,14 @@ class Product
         return $this;
     }
 
-    public function toJson() : string
+    public function jsonSerialize() : array
     {
-        return json_encode([
+        return [
             "id" => $this->id,
             "number" => $this->number,
             "name" => $this->name,
             "price" => $this->price,
-        ]);
-    }
-
-    public static function toJsonArray(array $products) : string
-    {
-        $arr = [];
-        foreach ($products as $product)
-        {
-            $arr[] = $product->toJson();
-        }
-        $json = join(',', $arr);
-        return "[{$json}]";
+            "stock" => $this->stock,
+        ];
     }
 }

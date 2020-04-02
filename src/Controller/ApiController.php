@@ -3,17 +3,34 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends AbstractController
 {
+    /**
+     * Decodes the JSON request into a PHP array.
+     */
     protected function getJSON(Request $request) : ?array
     {
         return json_decode($request->getContent(), true);
     }
 
+    /**
+     * Builds a JSON response for the API.
+     *
+     * @param mixed $object
+     */
+    protected function getResponse($object) : Response
+    {
+        return Response::create(json_encode($object), 200, [
+            "Content-Type" => "application/json",
+        ]);
+    }
+
+    /**
+     * Builds a JSON error response for the API.
+     */
     protected function getJSONError(string $error, int $status = Response::HTTP_BAD_REQUEST) : Response
     {
         return Response::create(json_encode([
@@ -26,11 +43,17 @@ class ApiController extends AbstractController
         ]);
     }
 
-    protected function getJSONValue(array &$data, string $value)
+    /**
+     * Returns the value for the given key or `null` if the key
+     * was not found.
+     *
+     * @return mixed
+     */
+    protected function getJSONValue(array &$data, string $key)
     {
-        if (isset($data[$value]))
+        if (isset($data[$key]))
         {
-            return $data[$value];
+            return $data[$key];
         }
         else
         {

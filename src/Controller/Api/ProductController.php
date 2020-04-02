@@ -38,9 +38,7 @@ class ProductController extends ApiController
             return $this->getJSONError("invalid product json: {$e->getMessage()}");
         }
 
-        return Response::create($product->toJson(), 200, [
-            "Content-Type" => "application/json",
-        ]);
+        return $this->getResponse($product);
     }
 
     /**
@@ -52,8 +50,6 @@ class ProductController extends ApiController
         $products = $entityManager->getRepository(Product::class);
         $products = $products->findAll();
 
-        return Response::create(Product::toJsonArray($products), 200, [
-            "Content-Type" => "application/json",
-        ]);
+        return $this->getResponse($products);
     }
 }

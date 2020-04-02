@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use JsonSerializable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StockRepository")
  */
-class Stock
+class Stock implements JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -71,5 +72,12 @@ class Stock
         $this->product = $product;
 
         return $this;
+    }
+
+    public function jsonSerialize() : array
+    {
+        return [
+            "quantity" => $this->quantity,
+        ];
     }
 }
