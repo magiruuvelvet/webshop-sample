@@ -77,6 +77,7 @@ class Stock implements JsonSerializable
     public function jsonSerialize() : array
     {
         return [
+            "id" => $this->getId(),
             "quantity" => $this->quantity,
         ];
     }

@@ -47,11 +47,13 @@ class ProductController extends ApiController
 
             try
             {
-                $stock->setQuantity($this->getJSONValue($stock_data, "quantity"));
                 $stock->setProduct($product);
+                $product->setStock($stock);
+
+                $stock->setQuantity($this->getJSONValue($stock_data, "quantity"));
+
                 $entityManager->persist($stock);
                 $entityManager->flush();
-                $product->setStock($stock);
             }
             catch (\Throwable $e)
             {
@@ -91,6 +93,73 @@ class ProductController extends ApiController
         {
             return $this->getJSONError("no such product with id: {$product_id}", Response::HTTP_NOT_FOUND);
         }
+    }
+
+    /**
+     * @Route("/api/products/{product_id}", methods={"PUT"})
+     */
+    public function updateProduct(Request $request, int $product_id) : Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $products = $entityManager->getRepository(Product::class);
+
+        /** @var Product|null */
+        $product = $products->find($product_id);
+
+        if (!$product)
+        {
+            return $this->getJSONError("no such product with id: {$product_id}", Response::HTTP_NOT_FOUND);
+        }
+
+        $data = $this->getJSON($request);
+        if (!$data)
+        {
+            return $this->getJSONError("invalid product json");
+        }
+
+        foreach (["number", "name", "price"] as $property)
+        {
+            $this->setProperty($product, $property, $this->getJSONValue($data, $property));
+        }
+
+        $entityManager->persist($product);
+        $entityManager->flush();
+
+        $stock_data = $this->getJSONValue($data, "stock");
+        if ($stock_data)
+        {
+            $stocks = $entityManager->getRepository(Stock::class);
+            $stock = $stocks->findOneBy(["product_id" => $product->getId()]);
+
+            if ($stock)
+            {
+                foreach (["quantity"] as $property)
+                {
+                    $this->setProperty($stock, $property, $this->getJSONValue($stock_data, $property));
+                }
+            }
+            else
+            {
+                $stock = new Stock();
+
+                try
+                {
+                    $stock->setProduct($product);
+                    $product->setStock($stock);
+
+                    $stock->setQuantity($this->getJSONValue($stock_data, "quantity"));
+                }
+                catch (\Throwable $e)
+                {
+                    // TODO: report error
+                }
+            }
+
+            $entityManager->persist($stock);
+            $entityManager->flush();
+        }
+
+        return $this->getResponse($product);
     }
 
     /**

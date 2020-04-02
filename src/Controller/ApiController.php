@@ -60,4 +60,29 @@ class ApiController extends AbstractController
             return null;
         }
     }
+
+    /**
+     * @param mixed $object
+     * @param mixed $value
+     */
+    protected function setProperty(&$object, string $name, $value) : void
+    {
+        if (is_null($value))
+        {
+            return;
+        }
+
+        $reflection = new \ReflectionClass($object);
+
+        try
+        {
+            $property = $reflection->getProperty($name);
+            $property->setAccessible(true);
+            $property->setValue($object, $value);
+        }
+        catch (\Throwable $e)
+        {
+            // ignore
+        }
+    }
 }
