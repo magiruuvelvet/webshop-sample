@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Product;
+use App\Entity\Stock;
 
 use App\Controller\ApiController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,6 +23,8 @@ class ProductController extends ApiController
             return $this->getJSONError("invalid product json");
         }
 
+        $entityManager = $this->getDoctrine()->getManager();
+
         $product = new Product();
 
         try
@@ -29,13 +32,31 @@ class ProductController extends ApiController
             $product->setNumber($this->getJSONValue($data, "number"));
             $product->setName($this->getJSONValue($data, "name"));
             $product->setPrice($this->getJSONValue($data, "price"));
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
         }
         catch (\Throwable $e)
         {
             return $this->getJSONError("invalid product json: {$e->getMessage()}");
+        }
+
+        $stock_data = $this->getJSONValue($data, "stock");
+        if ($stock_data)
+        {
+            $stock = new Stock();
+
+            try
+            {
+                $stock->setQuantity($this->getJSONValue($stock_data, "quantity"));
+                $stock->setProduct($product);
+                $entityManager->persist($stock);
+                $entityManager->flush();
+                $product->setStock($stock);
+            }
+            catch (\Throwable $e)
+            {
+                // TODO: report error
+            }
         }
 
         return $this->getResponse($product);
