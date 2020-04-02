@@ -1,3 +1,4 @@
+{% apply spaceless %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,15 +9,15 @@
         {% if block("title") is defined %}
             {% set title_block = block("title") %}
             {% if title_block is not empty %}
-                {{ title_block | raw }} ー {{ base_title }}
+                {{- title_block | raw -}} ー {{- base_title -}}
             {% else %}
-                {{ base_title }}
+                {{- base_title -}}
             {% endif %}
         {% else %}
-            {{ base_title }}
+            {{- base_title -}}
         {% endif %}
         </title>
-        {{ encore_entry_link_tags("style") }}
+        {{- encore_entry_link_tags("style") -}}
     </head>
     <body>
         <header class="page-header">
@@ -31,3 +32,4 @@
         </footer>
     </body>
 </html>
+{% endapply %}
