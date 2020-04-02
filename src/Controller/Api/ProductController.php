@@ -71,4 +71,29 @@ class ProductController extends ApiController
             return $this->getJSONError("no such product with id: {$product_id}", Response::HTTP_NOT_FOUND);
         }
     }
+
+    /**
+     * @Route("/api/products/{product_id}", methods={"DELETE"})
+     */
+    public function deleteProduct(int $product_id) : Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $products = $entityManager->getRepository(Product::class);
+        $product = $products->find($product_id);
+
+        if ($product)
+        {
+            $entityManager->remove($product);
+            $entityManager->flush();
+
+            return $this->getResponse([
+                "status" => "deleted",
+                "product" => $product,
+            ]);
+        }
+        else
+        {
+            return $this->getJSONError("no such product with id: {$product_id}", Response::HTTP_NOT_FOUND);
+        }
+    }
 }
