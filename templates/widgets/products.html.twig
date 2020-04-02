@@ -1,0 +1,24 @@
+{% if products is defined %}
+<div class="product-widget-container">
+    <div class="product-widget-inner">
+    {% for product in products %}
+        <div class="product">
+            <span class="title">{{ product.name }}</span>
+
+            <span class="price">
+                <span class="price-title">Price: </span><span class="price-num">{{ product.price }}</span>
+            </span>
+
+            <span class="availability">
+                <span class="availability-title">Availability: </span>
+                {% if product.stock is not null %}
+                <span class="availability-num">{{ product.stock.quantity }}</span>
+                {% else %}
+                <span class="availability-num">0</span>
+                {% endif %}
+            </span>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endif %}

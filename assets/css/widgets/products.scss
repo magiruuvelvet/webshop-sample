@@ -1,0 +1,35 @@
+.product-widget-container {
+
+    .product-widget-inner {
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+    }
+
+    .product {
+        width: 400px;
+        margin: 12px;
+
+        .availability-title,
+        .price-title {
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .title {
+            display: block;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .availability {
+            display: block;
+        }
+    }
+}
