@@ -14,13 +14,13 @@ class ApiController extends AbstractController
         return json_decode($request->getContent(), true);
     }
 
-    protected function getJSONError(string $error) : Response
+    protected function getJSONError(string $error, int $status = Response::HTTP_BAD_REQUEST) : Response
     {
         return Response::create(json_encode([
-            "status" => Response::HTTP_BAD_REQUEST,
+            "status" => $status,
             "error" => $error,
         ]),
-        Response::HTTP_BAD_REQUEST,
+        $status,
         [
             "Content-Type" => "application/json",
         ]);
