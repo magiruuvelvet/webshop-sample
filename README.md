@@ -4,6 +4,9 @@
 *web framework for an upcoming project. Repository is public for*
 *educational purposes. Feel free to use it.*
 
+**Disclaimer:** The API of this litte educational project is intentionally
+insecure to keep it simple. My next project won't include an API anyway.
+
 ## Requirements
 
  - PHP 7.2.5 or higher (PHP 7.3+ recommended)
