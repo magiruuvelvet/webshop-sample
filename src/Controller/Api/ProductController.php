@@ -52,4 +52,23 @@ class ProductController extends ApiController
 
         return $this->getResponse($products);
     }
+
+    /**
+     * @Route("/api/products/{product_id}", methods={"GET"})
+     */
+    public function getProduct(int $product_id) : Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $products = $entityManager->getRepository(Product::class);
+        $product = $products->find($product_id);
+
+        if ($product)
+        {
+            return $this->getResponse($product);
+        }
+        else
+        {
+            return $this->getJSONError("no such product with id: {$product_id}", Response::HTTP_NOT_FOUND);
+        }
+    }
 }
